@@ -54,3 +54,30 @@ function wapenDurability(weaponName)
 
   return nil 
 end
+
+RegisterNetEvent('sk-wapenrepair:startRepair', function(weaponName, prijs)
+  TriggerEvent('dp:startEmote', 'mechanic')
+
+  local success = lib.progressCircle({
+      duration = 20000, 
+      position = 'bottom',
+      useWhileDead = false,
+      canCancel = false,
+      disable = {
+          car = true,
+          move = true,
+      }
+  })
+
+  TriggerEvent('dp:cancelEmote')
+
+  if success then
+      TriggerServerEvent('sk-wapenrepair:completeRepair', weaponName, prijs)
+  else
+      lib.notify({
+          title = 'Reparatie Geannuleerd',
+          description = 'Je hebt de reparatie voortijdig gestopt.',
+          type = 'error'
+      })
+  end
+end)

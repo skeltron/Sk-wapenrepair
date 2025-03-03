@@ -1,7 +1,8 @@
 SK = {}
 
 SK.Logs = '' -- Webhook toevoegen voor logs
-SK.Prijs = 250000 -- Maximale reparatieprijs in zwart geld
+SK.Account = 'black_money' -- Het soort geld waarmee je kan betalen
+SK.Maxprijs = 250000 -- Maximale reparatieprijs in zwart geld
 
 SK.PedData = {
     model = `cs_casey`, -- Npc model
@@ -30,6 +31,12 @@ SK.PedData = {
       label = 'Ak', -- Naam van het wapen in het menu
       name = 'weapon_assaultrifle', -- Spawnnaam van het wapen
     },
+  }
+
+  SK.Notify = {
+    Geld = 'Je hebt niet genoeg zwart geld!',
+    Wapenreparatie = 'Je wapen is gerepareerd!',
+    Geenwapen = 'Je hebt dit wapen niet.' 
   }
   
   SK.ColorPalette = {

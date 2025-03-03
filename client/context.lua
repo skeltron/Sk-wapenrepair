@@ -5,31 +5,14 @@ local function openrepairmenu()
         local durability = wapenDurability(wapen.name)
 
         if durability and durability < 100 then 
-
-            local prijs = math.floor((100 - durability) / 100 * SK.Prijs) 
+            local prijs = math.floor((100 - durability) / 100 * SK.Maxprijs) 
 
             table.insert(options, {
                 title = wapen.label .. " (" .. durability .. "%)",
                 description = 'Reparatie kost: $' .. prijs .. ' zwart geld',
                 icon = "fa-solid fa-wrench",
                 onSelect = function()
-
-                    TriggerEvent('dp:startEmote', 'mechanic')
-
-                    lib.progressCircle({
-                        duration = 20000, 
-                        position = 'bottom',
-                        useWhileDead = false,
-                        canCancel = false,
-                        disable = {
-                            car = true,
-                            move = true,
-                        },
-                    })
-
-                    TriggerEvent('dp:cancelEmote')
-
-                    TriggerServerEvent('sk-wapenrepair:repair', wapen.name, prijs) 
+                    TriggerServerEvent('sk-wapenrepair:geldcheck', wapen.name, prijs)
                 end
             })
         end

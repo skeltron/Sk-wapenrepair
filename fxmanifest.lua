@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'sk-wapens'
+description 'sk-wapenrepair'
 
 shared_script {
     '@ox_lib/init.lua',

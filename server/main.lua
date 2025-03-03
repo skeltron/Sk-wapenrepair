@@ -1,27 +1,32 @@
-RegisterNetEvent('sk-wapenrepair:repair', function(weaponName, prijs)
+RegisterNetEvent('sk-wapenrepair:geldcheck', function(weaponName, prijs)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local zwartGeld = xPlayer.getAccount('black_money').money 
+    local zwartGeld = xPlayer.getAccount(SK.Account).money 
 
     if zwartGeld >= prijs then
-        local inventory = exports.ox_inventory:Search(source, 'slots', string.upper(weaponName))
-
-        if inventory and #inventory > 0 then
-            local slot = inventory[1].slot 
-
-            xPlayer.removeAccountMoney('black_money', prijs)
-
-            exports.ox_inventory:SetMetadata(source, slot, { durability = 100 })
-
-            sendToDiscord(SK.Logs, "SK-logs", "**Naam**: " .. GetPlayerName(source) .. "\n **ID**: " ..source .. "\n **License**: " .. xPlayer.getIdentifier() .. "\n**Wapen** " .. weaponName .."\n**Prijs:** €" .. prijs .."", 246504)
-
-            TriggerClientEvent('ox_lib:notify', source, { type = 'success', title = 'Succes', description = 'Je wapen is gerepareerd!' })
-        else
-            TriggerClientEvent('ox_lib:notify', source, { type = 'error', title = 'Fout', description = 'Je hebt dit wapen niet.' })
-        end
+        TriggerClientEvent('sk-wapenrepair:startRepair', source, weaponName, prijs)
     else
-        TriggerClientEvent('ox_lib:notify', source, { type = 'error', title = 'Fout', description = 'Je hebt niet genoeg zwart geld!' })
+        TriggerClientEvent('ox_lib:notify', source, { type = 'error', title = 'Fout', description = SK.Notify.Geld })
     end
 end)
+
+RegisterNetEvent('sk-wapenrepair:completeRepair', function(weaponName, prijs)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local inventory = exports.ox_inventory:Search(source, 'slots', string.upper(weaponName))
+
+    if inventory and #inventory > 0 then
+        local slot = inventory[1].slot 
+
+        xPlayer.removeAccountMoney(SK.Account, prijs)
+        exports.ox_inventory:SetMetadata(source, slot, { durability = 100 })
+
+        sendToDiscord(SK.Logs, "SK-logs", "**Naam**: " .. GetPlayerName(source) .. "\n **ID**: " ..source .. "\n **License**: " .. xPlayer.getIdentifier() .. "\n**Wapen** " .. weaponName .."\n**Prijs:** €" .. prijs .."", 246504)
+
+        TriggerClientEvent('ox_lib:notify', source, { type = 'success', title = 'Succes', description = SK.Notify.Wapenreparatie })
+    else
+        TriggerClientEvent('ox_lib:notify', source, { type = 'error', title = 'Fout', description = SK.Notify.Geenwapen })
+    end
+end)
+
 
 function sendToDiscord(webhook, name, message, color)
     local connect = {
